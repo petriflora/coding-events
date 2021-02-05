@@ -1,21 +1,46 @@
 package org.launchcode.codingevents.models;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.Email;
+import javax.validation.constraints.Size;
+import javax.validation.constraints.NotBlank;
 import java.util.Objects;
 
+@Entity
 public class Event {
 
+    @Id
+    @GeneratedValue
     private int id;
-    private static int nextId = 1;
+
+    @NotBlank (message = "Name is a required field.")
+    @Size(min = 3, max = 50, message = "Name must be between 3 and 50 characters.")
     private String name;
+
+    @Size(max = 500, message = "Description too long!")
     private String description;
+
+    @NotBlank (message = "Contact Email is a required field.")
+    @Email (message = "Invalid email. Try again.")
+    private String contactEmail;
+
+    @DecimalMin(value="1", message = "Events must have more than one attendee to be scheduled.")
     private int numberOfAttendees;
 
-    public Event(String name, String description) {
+    private EventType type;
+
+    public Event(String name, String description, int numberOfAttendees, String contactEmail, EventType type) {
         this.name = name;
         this.description = description;
-        this.id = nextId;
-        nextId++;
+        this.numberOfAttendees = numberOfAttendees;
+        this.contactEmail = contactEmail;
+        this.type = type;
     }
+
+    public Event() { }
 
     @Override
     public String toString() {
@@ -48,6 +73,22 @@ public class Event {
 
     public void setNumberOfAttendees(int numberOfAttendees) {
         this.numberOfAttendees = numberOfAttendees;
+    }
+
+    public String getContactEmail() {
+        return contactEmail;
+    }
+
+    public void setContactEmail(String contactEmail) {
+        this.contactEmail = contactEmail;
+    }
+
+    public EventType getType() {
+        return type;
+    }
+
+    public void setType(EventType type) {
+        this.type = type;
     }
 
     @Override
