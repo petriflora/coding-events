@@ -1,10 +1,9 @@
 package org.launchcode.codingevents.models;
 
 import javax.persistence.Entity;
-import javax.validation.constraints.DecimalMin;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.Size;
-import javax.validation.constraints.NotBlank;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.validation.constraints.*;
 
 @Entity
 public class Event extends AbstractEntity{
@@ -23,14 +22,16 @@ public class Event extends AbstractEntity{
     @DecimalMin(value="1", message = "Events must have more than one attendee to be scheduled.")
     private int numberOfAttendees;
 
-    private EventType type;
+    @ManyToOne
+    @NotNull(message = "Category selection is required.")
+    private EventCategory eventCategory;
 
-    public Event(String name, String description, int numberOfAttendees, String contactEmail, EventType type) {
+    public Event(String name, String description, int numberOfAttendees, String contactEmail, EventCategory eventCategory) {
         this.name = name;
         this.description = description;
         this.numberOfAttendees = numberOfAttendees;
         this.contactEmail = contactEmail;
-        this.type = type;
+        this.eventCategory = eventCategory;
     }
 
     public Event() { }
@@ -72,12 +73,11 @@ public class Event extends AbstractEntity{
         this.contactEmail = contactEmail;
     }
 
-    public EventType getType() {
-        return type;
+    public EventCategory getEventCategory() {
+        return eventCategory;
     }
 
-    public void setType(EventType type) {
-        this.type = type;
+    public void setEventCategory(EventCategory eventCategory) {
+        this.eventCategory = eventCategory;
     }
-
 }
